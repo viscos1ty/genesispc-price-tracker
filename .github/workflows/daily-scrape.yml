@@ -1,0 +1,52 @@
+name: Daily competitor price scrape
+
+on:
+  schedule:
+    # 3:00 UTC = 8:30 AM IST, every day
+    - cron: "0 3 * * *"
+  workflow_dispatch: {}  # lets you trigger it manually from the Actions tab
+
+permissions:
+  contents: write  # needed to commit the updated history + dashboard back to the repo
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Write service account credentials (optional Sheets export)
+        if: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON != '' }}
+        run: echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}' > service_account.json
+
+      - name: Run scraper and rebuild dashboard
+        env:
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS: service_account.json
+        run: |
+          if [ -z "${{ secrets.SHEET_ID }}" ]; then
+            python main.py --no-sheet
+          else
+            python main.py
+          fi
+
+      - name: Commit updated history + dashboard
+        run: |
+          git config user.name "price-tracker-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/history.json docs/index.html
+          git diff --staged --quiet || git commit -m "Daily price scrape $(date -u +%Y-%m-%d)"
+          git push
+
+      - name: Upload CSV as artifact (backup)
+        uses: actions/upload-artifact@v4
+        with:
+          name: price-snapshot-${{ github.run_number }}
+          path: output/*.csv

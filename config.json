@@ -1,0 +1,47 @@
+{
+  "own_store": {
+    "name": "GenesisPC",
+    "url": "https://www.genesispc.in",
+    "platform": "shopify"
+  },
+  "brand_keywords": [
+    "MCHOSE",
+    "ATK",
+    "Artisan",
+    "Endgame Gear",
+    "Wobkey",
+    "Xraypad",
+    "X-Raypad",
+    "Scyrox",
+    "GLSSWRKS",
+    "GameSir"
+  ],
+  "stores": [
+    {
+      "name": "NMPC India",
+      "url": "https://www.nmpc.in",
+      "platform": "shopify"
+    },
+    {
+      "name": "RyuGear",
+      "url": "https://ryugear.in",
+      "platform": "shopify"
+    },
+    {
+      "name": "Neo Macro",
+      "url": "https://neomacro.in",
+      "platform": "shopify"
+    },
+    {
+      "name": "Meckeys",
+      "url": "https://meckeys.com",
+      "platform": "woocommerce",
+      "categories": [
+        "https://meckeys.com/category/keyboard/?stock-status=in-stock",
+        "https://meckeys.com/category/mouse/?stock-status=in-stock",
+        "https://meckeys.com/category/deskmat/?stock-status=in-stock",
+        "https://meckeys.com/category/accessories/?stock-status=in-stock"
+      ]
+    }
+  ]
+}
